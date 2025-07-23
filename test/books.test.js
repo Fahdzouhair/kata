@@ -19,5 +19,11 @@ describe('Books Service Tests', () => {
     expect(status).to.eql(200);
   })
 
+  it('Histoy Book Get', async()=>{
+    const {status , data} = await GET('/odata/v4/catalog/PurchaseHostories');
+    expect(status).to.eql(200);
+    console.log(data.value);
+  })
+
 
 });

@@ -6,3 +6,8 @@ entity Book:cuid{
     title  : String;
     author : String;
 }
+
+entity PurchaseHostory:cuid{
+    user_id : String;
+    date    : Date
+}
