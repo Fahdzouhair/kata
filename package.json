@@ -22,5 +22,17 @@
   "scripts": {
     "start": "cds-serve",
     "test": "jest"
+  },
+  "cds": {
+    "requires": {
+      "kind": "basic",
+      "users": {
+        "fahd": {
+          "password": "123456"
+        },
+      "saif": {
+        "password": "1234567"
+        }
+      }
   }
-}
+}}
