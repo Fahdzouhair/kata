@@ -25,14 +25,17 @@
   },
   "cds": {
     "requires": {
-      "kind": "basic",
-      "users": {
-        "fahd": {
-          "password": "123456"
-        },
-      "saif": {
-        "password": "1234567"
+      "auth": {
+        "kind": "basic",
+        "users": {
+          "fahd": {
+            "password": "123456"
+          },
+          "saif": {
+            "password": "1234567"
+          }
         }
       }
+    }
   }
-}}
+}
