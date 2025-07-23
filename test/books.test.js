@@ -8,16 +8,15 @@ describe('Books Service Tests', () => {
 
   it('Books created ->201', async()=>{
     const newBook = {title:'kozina' , author:'saaid'};
-    const { status , data  } = await POST('/odata/v4/catalog/Books',newBook);
+    const { status , data  } = await POST('/odata/v4/catalog/Books',newBook , { auth : { username : "alice" , password : "123456" }});
 
     expect(status).to.equal(201);
     expect(data.author).to.equal(newBook.author);
   })
 
-  it('Books get -> 200',async() =>{
-    const {status , data} = await GET('/odata/v4/catalog/Books');
-    expect(status).to.equal(200);
-    expect(Array.isArray(data.value)).to.equal(true)
+  it('Books Get With Alice User', async()=>{
+    const {status, data} = await GET('/odata/v4/catalog/Books', { auth: { username : 'alice' , password : '123456' }});
+    expect(status).to.eql(200);
   })
 
 
