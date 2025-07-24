@@ -48,7 +48,7 @@ describe('Books Service Tests', () => {
   it('Book PUT Test ->405', async () => {
     try {
       await PUT('/odata/v4/catalog/Books(6b4e801c-c081-440d-8353-457767a327a4)', { title: "ana", author: '8' }, { auth: { username: "fahd", password: "123456" } });
-      expect.fail('PASSED THROUGH MY PUT METHOD');
+      expect.fail('It should fail here on PUT');
     } catch (error) {
       expect(error?.status).to.eql(405, error.message);
     }
@@ -59,7 +59,7 @@ describe('Books Service Tests', () => {
   it('Book DELETE Test ->405', async () => {
     try {
       await DELETE('/odata/v4/catalog/Books(7812e4c4-9db5-4176-bb64-1b216bb2f742)', { auth: { username: "fahd", password: "123456" } });
-      expect.fail('PASSED THROUGH MY PUT METHOD');
+      expect.fail('It should fail here on DELETE');
     } catch (error) {
       expect(error?.status).to.eql(405, error.message);
     }
