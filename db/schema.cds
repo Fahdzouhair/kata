@@ -6,4 +6,3 @@ entity Book:cuid{
     title  : String;
     author : String;
 }
- 
