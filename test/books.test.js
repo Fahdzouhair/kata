@@ -139,7 +139,7 @@ describe('PurchaseHistories Service Test', () => {
 
     await executeRequestExpectingErrorStatus(
       () => POST(url('PurchaseHistories'), newPurchaseHistory, { auth: null }),
-      403,
+      405,
       'on Put PurchaseHistory'
     )
   })
