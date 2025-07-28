@@ -90,7 +90,7 @@ describe('Books Service Tests', () => {
 
 describe('PurchaseHistories Service Test', () => {
   let purchaseHistorTestId;
-  const newPurchaseHistory = {
+  const expectedPurchaseHistory = {
     book_id: "7812e4c4-9db5-5687-bb64-1b216bb2f569",
     user_id: "7812e4c4-874d-2365-opl9-09876bb2f790",
     date: "2022-12-31"
@@ -138,7 +138,7 @@ describe('PurchaseHistories Service Test', () => {
   it('Test POST PurchaseHistory -> x', async () => {
 
     await executeRequestExpectingErrorStatus(
-      () => POST(url('PurchaseHistories'), newPurchaseHistory, { auth: null }),
+      () => POST(url('PurchaseHistories'), expectedPurchaseHistory, { auth: null }),
       405,
       'on Put PurchaseHistory'
     )
