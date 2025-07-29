@@ -10,7 +10,9 @@ Service CatalogService {
     @Capabilities : { 
        Updatable : false, Deletable : false,
      }
-    entity Books as projection on my.Book ;
+    entity Books as projection on my.Book actions{
+      action buyBook2() returns String;
+    } ;
 
     action buyBook(bookID: UUID) returns PurchaseHistories ;
     
