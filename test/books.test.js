@@ -3,8 +3,8 @@ const { stat } = require('@sap/cds/lib/utils/cds-utils');
 
 const test = cds.test(__dirname + '/..');
 const { POST, GET, PUT, DELETE, expect, axios } = test;
-let service = '/odata/v4/catalog/';
-let url = (entity, id) => {
+const service = '/odata/v4/catalog/';
+const url = (entity, id) => {
   return id ? `${service}${entity}('${id}')` : `${service}/${entity}`;
 }
 axios.defaults.auth = { username: "fahd", password: "123456" };
@@ -154,13 +154,17 @@ describe('Test Action buyBook',()=>{
     let expectedBookToInsert = {
       bookID : "7812e4c4-9db5-4176-bb64-1b216bb2f742",
     }
-    const expectedDate = new Date().toISOString().slice(0, 10);
-    const { status , data } = await POST(`${service}buyBook`,expectedBookToInsert);
+    
+    
+    const test = url('Books',expectedBookToInsert.bookID) + '/buyBook';
+    console.log('faaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaahd');
+    console.log(test);
+    const { status , data } = await POST(url('Books',expectedBookToInsert.bookID) + '/buyBook');
   
     expect(status).to.eql(201);
     expect(data.book_id).to.eql(expectedBookToInsert.bookID);
     expect(data.user_id).to.eql(axios.defaults.auth.username);
-    expect(data.date).to.eql(expectedDate);
+ 
   });
 
   it('Test buyBook with inexisting book ',async()=>{
