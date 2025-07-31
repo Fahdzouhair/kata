@@ -10,7 +10,7 @@ module.exports = srv => {
             date: Date.now()
         }
         
-        //const {ID : existBook} = await SELECT.one.from(req.subject).columns('ID');
+        
         const [ { ID : existBook } ] = await cds.run(req.query);
 
         if (!existBook) {
@@ -21,17 +21,9 @@ module.exports = srv => {
                 target: 'bookID'
             })
         }
-        try {
-            const [{ ID }] = await cds.run(INSERT.into('PurchaseHistory').entries(bookInserted));
+        const [{ ID }] = await cds.run(INSERT.into('PurchaseHistory').entries(bookInserted));
             req.res.status(201);
             return { ID , ...bookInserted };
-        } catch (err) {
-            throw req.reject({
-                status: err.status,
-                code: err.code,
-                message: err.message
-            })
-        }
 
     });
 };

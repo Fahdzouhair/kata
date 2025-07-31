@@ -1,5 +1,5 @@
 const cds = require('@sap/cds');
-const { stat } = require('@sap/cds/lib/utils/cds-utils');
+
 
 const test = cds.test(__dirname + '/..');
 const { POST, GET, PUT, DELETE, expect, axios } = test;
@@ -157,8 +157,6 @@ describe('Test Action buyBook',()=>{
     
     
     const test = url('Books',expectedBookToInsert.bookID) + '/buyBook';
-    console.log('faaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaahd');
-    console.log(test);
     const { status , data } = await POST(url('Books',expectedBookToInsert.bookID) + '/buyBook');
   
     expect(status).to.eql(201);
