@@ -1,10 +1,11 @@
 const cds = require('@sap/cds');
 
+
 const test = cds.test(__dirname + '/..');
 const { POST, GET, PUT, DELETE, expect, axios } = test;
-
-let url = (entity, id) => {
-  return id ? `/odata/v4/catalog/${entity}('${id}')` : `/odata/v4/catalog/${entity}`;
+const service = '/odata/v4/catalog/';
+const url = (entity, id) => {
+  return id ? `${service}${entity}('${id}')` : `${service}/${entity}`;
 }
 axios.defaults.auth = { username: "fahd", password: "123456" };
 
@@ -138,12 +139,40 @@ describe('PurchaseHistories Service Test', () => {
   it('Test POST PurchaseHistory -> x', async () => {
 
     await executeRequestExpectingErrorStatus(
-      () => POST(url('PurchaseHistories'), expectedPurchaseHistory, { auth: null }),
+      () => POST(url('PurchaseHistories'), {expectedPurchaseHistory}, { auth: null }),
       405,
       'on Put PurchaseHistory'
     )
   })
 
+})
+
+describe('Test Action buyBook',()=>{
+
+  it(`Test buyBook Action with user ${axios.defaults.auth.username}`,async()=>{
+
+    let expectedBookToInsert = {
+      bookID : "7812e4c4-9db5-4176-bb64-1b216bb2f742",
+    }
+    
+    
+    const test = url('Books',expectedBookToInsert.bookID) + '/buyBook';
+    const { status , data } = await POST(url('Books',expectedBookToInsert.bookID) + '/buyBook');
+  
+    expect(status).to.eql(201);
+    expect(data.book_id).to.eql(expectedBookToInsert.bookID);
+    expect(data.user_id).to.eql(axios.defaults.auth.username);
+ 
+  });
+
+  it('Test buyBook with inexisting book ',async()=>{
+    await executeRequestExpectingErrorStatus(
+      () => POST(`${service}/buyBook`,{bookID : 'test'}),
+      404,
+      "On buyBook Action"
+    );
+  })
+  
 })
 
 
