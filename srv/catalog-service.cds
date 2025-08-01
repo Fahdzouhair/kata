@@ -6,17 +6,24 @@ service CatalogService {
     Updatable : false,
     Deletable : false,
   }
+  @(restrict: [{
+    grant: 'READ',
+    to   : 'Seller'
+  }])
   entity PurchaseHistories as projection on my.PurchaseHistory;
 
-      @(requires: 'authenticated-user')
-      @Capabilities: {
+  @(requires: 'authenticated-user')
+  @Capabilities: {
     Updatable: false,
     Deletable: false,
   }
-      @(restrict: [
+  @(restrict: [
     {
       grant: 'READ',
-      to   : ['Seller','Buyer']
+      to   : [
+        'Seller',
+        'Buyer'
+      ]
     },
     {
       grant: 'WRITE',

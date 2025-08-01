@@ -7,6 +7,11 @@ const service = '/odata/v4/catalog/';
 const url = (entity, id) => {
   return id ? `${service}${entity}('${id}')` : `${service}/${entity}`;
 }
+const buyerUser = { username: "saif", password: "1234567" };
+const sellerUser = { username: "fahd", password: "123456" };
+
+const buyerAuth = { auth: buyerUser };
+const sellerAuth = { auth: sellerUser };
 
 
 //executeRequestExpectingErrorStatus expects the fn to throw an error with a specific status otherwise the test will fail.
@@ -20,7 +25,7 @@ const executeRequestExpectingErrorStatus = async (fn, err_stratus, message) => {
 }
 
 describe('Books Service Tests', () => {
-  axios.defaults.auth = { username: "fahd", password: "123456" };
+  axios.defaults.auth = sellerUser;
 
   let bookTestId;
   const newBook = {
@@ -31,7 +36,7 @@ describe('Books Service Tests', () => {
   //check buyer can't post Book
   it('Books Post with saif (Buyer)', async () => {
     await executeRequestExpectingErrorStatus(
-      () => POST(url('Books'), newBook, { auth: { username: "saif", password: "1234567" } }),
+      () => POST(url('Books'), newBook, buyerAuth),
       403,
       'On Post with user saif (Buyer)'
     )
@@ -54,7 +59,7 @@ describe('Books Service Tests', () => {
   })
 
   it('Test Count item in GET BOOKS with (Buyer)', async () => {
-    const { data } = await GET(url('Books'),{auth : {username : "saif" , password: "1234567"}});
+    const { data } = await GET(url('Books'), buyerAuth);
     expect(data.value.length).to.eql(4);
   })
 
@@ -109,9 +114,17 @@ describe('PurchaseHistories Service Test', () => {
     date: "2022-12-31"
   };
 
+  it('Test Get PurchaseHistory with Buyer User', async () => {
+    await executeRequestExpectingErrorStatus(
+      () => GET(url('PurchaseHistories'), buyerAuth),
+      403,
+      'On Post with user saif (Buyer)'
+    )
+  })
+
   //test GET PurchaseHistory
-  it('Test GET PurchaseHistory', async () => {
-    const { status, data } = await GET(url('PurchaseHistories'), { auth: null })
+  it('Test GET PurchaseHistory with Seller User', async () => {
+    const { status, data } = await GET(url('PurchaseHistories'))
     expect(status).to.eql(200);
     purchaseHistorTestId = data.value[0].ID;
 
@@ -161,31 +174,30 @@ describe('PurchaseHistories Service Test', () => {
 
 describe('Test Action buyBook', () => {
   const expectedBookToInsert = {
-      bookID: "7812e4c4-9db5-4176-bb64-1b216bb2f742",
-    }
+    bookID: "7812e4c4-9db5-4176-bb64-1b216bb2f742",
+  };
 
   it('Test buyBook Action with Seller User', async () => {
     await executeRequestExpectingErrorStatus(
-      () => POST(url('Books', expectedBookToInsert.bookID) + '/buyBook' ),
+      () => POST(url('Books', expectedBookToInsert.bookID) + '/buyBook'),
       403,
       'On buyBook Action with Seller User'
     )
-  }),
- 
+  })
+
   it(`Test buyBook Action with Buyer User`, async () => {
 
-    axios.defaults.auth = {username : "saif" , password : "1234567"}
-    const { status, data } = await POST(url('Books', expectedBookToInsert.bookID) + '/buyBook');
-    
+    const { status, data } = await POST(url('Books', expectedBookToInsert.bookID) + '/buyBook', undefined, buyerAuth);
+
     expect(status).to.eql(201);
     expect(data.book_id).to.eql(expectedBookToInsert.bookID);
-    expect(data.user_id).to.eql(axios.defaults.auth.username);
+    expect(data.user_id).to.eql(buyerUser.username);
 
   })
 
   it('Test buyBook with inexisting book', async () => {
     await executeRequestExpectingErrorStatus(
-      () => POST(url('Books', 'test-test-test') + '/buyBook'),
+      () => POST(url('Books', 'test-test-test') + '/buyBook',undefined , buyerAuth),
       404,
       'On buyBook action with inexisting book'
     )
