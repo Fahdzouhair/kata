@@ -7,7 +7,7 @@ const service = '/odata/v4/catalog/';
 const url = (entity, id) => {
   return id ? `${service}${entity}('${id}')` : `${service}/${entity}`;
 }
-//axios.defaults.auth = { username: "fahd", password: "123456" };
+
 
 //executeRequestExpectingErrorStatus expects the fn to throw an error with a specific status otherwise the test will fail.
 const executeRequestExpectingErrorStatus = async (fn, err_stratus, message) => {
