@@ -160,16 +160,23 @@ describe('PurchaseHistories Service Test', () => {
 })
 
 describe('Test Action buyBook', () => {
-
- 
-  it(`Test buyBook Action`, async () => {
-
-    let expectedBookToInsert = {
+  const expectedBookToInsert = {
       bookID: "7812e4c4-9db5-4176-bb64-1b216bb2f742",
     }
 
-    const { status, data } = await POST(url('Books', expectedBookToInsert.bookID) + '/buyBook');
+  it('Test buyBook Action with Seller User', async () => {
+    await executeRequestExpectingErrorStatus(
+      () => POST(url('Books', expectedBookToInsert.bookID) + '/buyBook' ),
+      403,
+      'On buyBook Action with Seller User'
+    )
+  }),
+ 
+  it(`Test buyBook Action with Buyer User`, async () => {
 
+    axios.defaults.auth = {username : "saif" , password : "1234567"}
+    const { status, data } = await POST(url('Books', expectedBookToInsert.bookID) + '/buyBook');
+    
     expect(status).to.eql(201);
     expect(data.book_id).to.eql(expectedBookToInsert.bookID);
     expect(data.user_id).to.eql(axios.defaults.auth.username);

@@ -13,7 +13,7 @@ module.exports = srv => {
 
 
         const rslt = await SELECT.one.from(req.subject).columns('ID');
-
+        
         if (!rslt?.ID) {
             return req.reject({
                 status: 404,
