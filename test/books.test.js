@@ -7,7 +7,7 @@ const service = '/odata/v4/catalog/';
 const url = (entity, id) => {
   return id ? `${service}${entity}('${id}')` : `${service}/${entity}`;
 }
-axios.defaults.auth = { username: "fahd", password: "123456" };
+//axios.defaults.auth = { username: "fahd", password: "123456" };
 
 //executeRequestExpectingErrorStatus expects the fn to throw an error with a specific status otherwise the test will fail.
 const executeRequestExpectingErrorStatus = async (fn, err_stratus, message) => {
@@ -20,29 +20,41 @@ const executeRequestExpectingErrorStatus = async (fn, err_stratus, message) => {
 }
 
 describe('Books Service Tests', () => {
+  axios.defaults.auth = { username: "fahd", password: "123456" };
+
   let bookTestId;
   const newBook = {
     title: 'kozina',
     author: 'saaid'
   };
 
+  //check buyer can't post Book
+  it('Books Post with saif (Buyer)', async () => {
+    await executeRequestExpectingErrorStatus(
+      () => POST(url('Books'), newBook, { auth: { username: "saif", password: "1234567" } }),
+      403,
+      'On Post with user saif (Buyer)'
+    )
+
+  })
   // check authenticated user get a 401 status with POST
-  it('Books Post with Fahd', async () => {
+  it('Books Post with Fahd (Seller)', async () => {
+
     const { status, data } = await POST(url('Books'), newBook);
     expect(status).to.equal(201);
     expect(data.author).to.equal(newBook.author);
     bookTestId = data.ID;
   })
 
-  it('Test GET After Post', async () => {
+  it('Test GET After Post (Seller)', async () => {
     const { data } = await GET(url('Books', bookTestId));
     expect(data.title).to.eql(newBook.title);
     expect(data.author).to.eql(newBook.author);
     expect(data.ID).to.eq(bookTestId);
   })
 
-  it('Test Count item in GET BOOKS', async () => {
-    const { data } = await GET(url('Books'));
+  it('Test Count item in GET BOOKS with (Buyer)', async () => {
+    const { data } = await GET(url('Books'),{auth : {username : "saif" , password: "1234567"}});
     expect(data.value.length).to.eql(4);
   })
 
@@ -105,7 +117,7 @@ describe('PurchaseHistories Service Test', () => {
 
     const book_id = data.value[0].book_id;
     const user_id = data.value[0].user_id;
-    const date    = data.value[0].date;
+    const date = data.value[0].date;
 
     expect(data.value[0].book_id).to.eql(book_id);
     expect(data.value[0].user_id).to.eql(user_id);
@@ -139,7 +151,7 @@ describe('PurchaseHistories Service Test', () => {
   it('Test POST PurchaseHistory -> x', async () => {
 
     await executeRequestExpectingErrorStatus(
-      () => POST(url('PurchaseHistories'), {expectedPurchaseHistory}, { auth: null }),
+      () => POST(url('PurchaseHistories'), { expectedPurchaseHistory }, { auth: null }),
       405,
       'on Put PurchaseHistory'
     )
@@ -147,32 +159,31 @@ describe('PurchaseHistories Service Test', () => {
 
 })
 
-describe('Test Action buyBook',()=>{
+describe('Test Action buyBook', () => {
 
-  it(`Test buyBook Action with user ${axios.defaults.auth.username}`,async()=>{
+ 
+  it(`Test buyBook Action`, async () => {
 
     let expectedBookToInsert = {
-      bookID : "7812e4c4-9db5-4176-bb64-1b216bb2f742",
+      bookID: "7812e4c4-9db5-4176-bb64-1b216bb2f742",
     }
-    
-    
-    const test = url('Books',expectedBookToInsert.bookID) + '/buyBook';
-    const { status , data } = await POST(url('Books',expectedBookToInsert.bookID) + '/buyBook');
-  
+
+    const { status, data } = await POST(url('Books', expectedBookToInsert.bookID) + '/buyBook');
+
     expect(status).to.eql(201);
     expect(data.book_id).to.eql(expectedBookToInsert.bookID);
     expect(data.user_id).to.eql(axios.defaults.auth.username);
- 
-  });
 
-  it('Test buyBook with inexisting book ',async()=>{
-    await executeRequestExpectingErrorStatus(
-      () => POST(`${service}/buyBook`,{bookID : 'test'}),
-      404,
-      "On buyBook Action"
-    );
   })
-  
+
+  it('Test buyBook with inexisting book', async () => {
+    await executeRequestExpectingErrorStatus(
+      () => POST(url('Books', 'test-test-test') + '/buyBook'),
+      404,
+      'On buyBook action with inexisting book'
+    )
+  })
+
 })
 
 

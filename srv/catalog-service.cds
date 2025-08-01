@@ -16,11 +16,15 @@ service CatalogService {
       @(restrict: [
     {
       grant: 'READ',
-      to   : 'Buyer'
+      to   : ['Seller','Buyer']
     },
     {
       grant: 'WRITE',
       to   : 'Seller'
+    },
+    {
+      grant: 'buyBook',
+      to   : 'any'
     }
   ])
   entity Books             as projection on my.Book
