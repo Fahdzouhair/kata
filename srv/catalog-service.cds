@@ -24,7 +24,7 @@ service CatalogService {
     },
     {
       grant: 'buyBook',
-      to   : 'any'
+      to   : 'authenticated-user'
     }
   ])
   entity Books             as projection on my.Book
