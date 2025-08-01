@@ -30,10 +30,12 @@
         "kind": "basic",
         "users": {
           "fahd": {
-            "password": "123456"
+            "password": "123456",
+            "roles": ["Seller"]
           },
           "saif": {
-            "password": "1234567"
+            "password": "1234567",
+            "roles": ["Buyer"]
           }
         }
       }
