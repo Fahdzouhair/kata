@@ -20,6 +20,7 @@ const executeRequestExpectingErrorStatus = async (fn, err_stratus, message) => {
     await fn();
     expect.fail(`it should failed ${message} `)
   } catch (err) {
+    console.log(err);
     expect(err.status).to.eql(err_stratus, err.message);
   }
 }
@@ -43,8 +44,8 @@ describe('Books Service Tests', () => {
 
   })
   // check authenticated user get a 401 status with POST
-  it('Books Post with Fahd (Seller)', async () => {
 
+  it('Books Post with Fahd (Seller)', async () => {
     const { status, data } = await POST(url('Books'), newBook);
     expect(status).to.equal(201);
     expect(data.author).to.equal(newBook.author);
@@ -172,7 +173,11 @@ describe('PurchaseHistories Service Test', () => {
 
 })
 
-describe('Test Action buyBook', () => {
+
+  
+
+describe('Test Action buyBook',()=>{
+  
   const expectedBookToInsert = {
     bookID: "7812e4c4-9db5-4176-bb64-1b216bb2f742",
   };
@@ -188,7 +193,8 @@ describe('Test Action buyBook', () => {
   it(`Test buyBook Action with Buyer User`, async () => {
 
     const { status, data } = await POST(url('Books', expectedBookToInsert.bookID) + '/buyBook', undefined, buyerAuth);
-
+    
+    
     expect(status).to.eql(201);
     expect(data.book_id).to.eql(expectedBookToInsert.bookID);
     expect(data.user_id).to.eql(buyerUser.username);

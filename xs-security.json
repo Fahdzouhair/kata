@@ -1,0 +1,38 @@
+{
+  "xsappname": "KataDemo",
+  "tenant-mode": "dedicated",
+  "oauth2-configuration": {
+    "redirect-uris": [
+      "https://{app-api/app-uri}/**"
+    ]
+  },
+  "scopes": [
+    {
+      "name": "$XSAPPNAME.Seller",
+      "description": "Seller"
+    },
+    {
+      "name": "$XSAPPNAME.Buyer",
+      "description": "Buyer"
+    }
+  ],
+  "attributes": [],
+  "role-templates": [
+    {
+      "name": "Seller",
+      "description": "generated",
+      "scope-references": [
+        "$XSAPPNAME.Seller"
+      ],
+      "attribute-references": []
+    },
+    {
+      "name": "Buyer",
+      "description": "generated",
+      "scope-references": [
+        "$XSAPPNAME.Buyer"
+      ],
+      "attribute-references": []
+    }
+  ]
+}

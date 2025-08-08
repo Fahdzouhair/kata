@@ -2,7 +2,6 @@ const cds = require('@sap/cds');
 
 module.exports = srv => {
     srv.on('buyBook', async (req) => {
-
         const { params } = req;
 
         const bookInserted = {

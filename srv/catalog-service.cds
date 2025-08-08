@@ -20,10 +20,7 @@ service CatalogService {
   @(restrict: [
     {
       grant: 'READ',
-      to   : [
-        'Seller',
-        'Buyer'
-      ]
+      to   : ['Buyer' , 'Seller']
     },
     {
       grant: 'WRITE',
@@ -34,8 +31,9 @@ service CatalogService {
       to   : 'Buyer'
     }
   ])
-  entity Books             as projection on my.Book
+  entity Books as projection on my.Book
     actions {
+      
       action buyBook() returns PurchaseHistories;
     };
 
