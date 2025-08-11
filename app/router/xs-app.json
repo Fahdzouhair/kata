@@ -1,0 +1,17 @@
+{
+  "authenticationMethod": "route",
+  "routes": [
+    {
+      "authenticationType": "xsuaa",
+      "source": "^/backend/(.*)$",
+      "target": "$1",
+      "destination": "srv-app",
+      "csrfProtection": true
+    },
+    {
+      "source": "^/user-api/currentUser$",
+      "target": "/currentUser",
+      "service": "sap-approuter-userapi"
+    }
+  ]
+}

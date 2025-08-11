@@ -1,0 +1,38 @@
+{
+  "xsappname": "cap_demo_tuto",
+  "tenant-mode": "dedicated",
+  "oauth2-configuration": {
+    "redirect-uris": [
+      "https://*.cfapps.us10*.hana.ondemand.com/**"
+    ]
+  },
+  "scopes": [
+    {
+      "name": "$XSAPPNAME.Seller",
+      "description": "Seller"
+    },
+    {
+      "name": "$XSAPPNAME.Buyer",
+      "description": "Buyer"
+    }
+  ],
+  "attributes": [],
+  "role-templates": [
+    {
+      "name": "Seller",
+      "description": "generated",
+      "scope-references": [
+        "$XSAPPNAME.Seller"
+      ],
+      "attribute-references": []
+    },
+    {
+      "name": "Buyer",
+      "description": "generated",
+      "scope-references": [
+        "$XSAPPNAME.Buyer"
+      ],
+      "attribute-references": []
+    }
+  ]
+}
