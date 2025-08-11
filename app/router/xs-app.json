@@ -9,8 +9,13 @@
       "csrfProtection": true
     },
     {
-      "source": "^/user-api/currentUser$",
-      "target": "/currentUser",
+      "source": "/user-api/currentUser$",
+      "target": "/ttributes",
+      "service": "sap-approuter-userapi"
+    },
+    {
+      "source": "/user-api/attributes$",
+      "target": "/attributes",
       "service": "sap-approuter-userapi"
     }
   ]
