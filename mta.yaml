@@ -1,0 +1,63 @@
+_schema-version: 3.3.0
+ID: KataProject8
+version: 1.0.0
+description: "A simple CAP project."
+parameters:
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production
+modules:
+  - name: backend_module2
+    type: nodejs
+    path: gen/srv
+    build-parameters:
+      builder: npm-ci
+    parameters:
+      buildpack: nodejs_buildpack
+    provides:
+      - name: srv-app
+        properties:
+          srv-url: ${default-url}
+    requires:
+      - name: db_resource2
+      - name: auth_resource2
+
+
+  - name: approputer
+    type: approuter.nodejs
+    path: app/router
+    requires:
+      - name: srv-app
+        group: destinations
+        properties:
+          name: srv-app
+          url: ~{srv-url}
+          forwardAuthToken: true
+      - name: auth_resource2
+
+
+  - name: db_module
+    type: hdb
+    path: gen/db
+    parameters:
+      buildpack: nodejs_buildpack
+    requires:
+      - name: db_resource2
+
+resources:
+  - name: auth_resource2
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+
+  - name: db_resource2
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared

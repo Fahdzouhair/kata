@@ -6,7 +6,9 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
+    "@cap-js/hana": "^2.1.2",
     "@sap/cds": "^9",
+    "@sap/xssec": "^4",
     "express": "^4"
   },
   "engines": {
@@ -16,6 +18,7 @@
     "@cap-js/cds-test": "^0.4.0",
     "@cap-js/cds-types": "^0.13.0",
     "@cap-js/sqlite": "^2",
+    "@sap/cds-dk": ">=8",
     "axios": "^1.11.0",
     "jest": "^30.0.5",
     "supertest": "^7.1.3"
@@ -31,13 +34,23 @@
         "users": {
           "fahd": {
             "password": "123456",
-            "roles": ["Seller"]
+            "roles": [
+              "Seller"
+            ]
           },
           "saif": {
             "password": "1234567",
-            "roles": ["Buyer"]
+            "roles": [
+              "Buyer"
+            ]
           }
         }
+      },
+      "[production]": {
+        "auth": {
+          "kind": "xsuaa"
+        },
+        "db": "hana"
       }
     }
   }
